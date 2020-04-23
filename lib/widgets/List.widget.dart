@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:firstflutterapp/services/ToDo.service.dart';
+import 'package:firstflutterapp/services/toDo.service.dart';
 import 'package:intl/intl.dart';
 
 class ListWidget extends StatelessWidget {
@@ -15,7 +15,6 @@ class ListWidget extends StatelessWidget {
         return AlertDialog(
           title: new Text("Remove this task?"),
           actions: <Widget>[
-            // usually buttons at the bottom of the dialog
             new FlatButton(
               child: Text("Close"),
               onPressed: () {
@@ -40,16 +39,16 @@ class ListWidget extends StatelessWidget {
 //  }
 
   Widget _buildAllList(text, date, index, context) {
-    var time = DateFormat.jm().format(date);
+    var time = DateFormat.jm().format(new DateTime.now());
     return ListTile(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          Text(text, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Text(text,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           Text(time, style: TextStyle(fontSize: 15)),
         ],
       ),
-
       subtitle: RaisedButton(
         child: Text('remove'),
         onPressed: () => _showDialog(context, index),
@@ -62,11 +61,23 @@ class ListWidget extends StatelessWidget {
     return Row(
       children: <Widget>[
         Expanded(
-          child: ListView.builder(itemBuilder: (context, index) {
-            if (index < list.length) {
-              return _buildAllList(list[index]['title'], list[index]['createDate'], index, context);
-            }
-          }),
+          child: list == 0
+              ? Center(
+                  child: SizedBox(
+                    height: 50.0,
+                    width: 50.0,
+                    child: CircularProgressIndicator(
+                      value: null,
+                      strokeWidth: 7.0,
+                    ),
+                  ),
+                )
+              : list.length == 0 ? Center(child: Text('List is empty'),) : ListView.builder(itemBuilder: (context, index) {
+                  if (index < list.length) {
+                    return _buildAllList(list[index]['name'],
+                        list[index]['createdAt'], index, context);
+                  }
+                }),
         ),
       ],
     );

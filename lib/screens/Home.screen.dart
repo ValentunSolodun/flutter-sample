@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firstflutterapp/widgets/AppBar.widget.dart';
 import 'package:firstflutterapp/widgets/List.widget.dart';
-import 'package:firstflutterapp/services/ToDo.service.dart';
+import 'package:firstflutterapp/services/toDo.service.dart';
+import 'package:firstflutterapp/services/apiController.service.dart';
 
 class MyHome extends StatelessWidget {
 //  final List<dunamic> list;
@@ -14,11 +15,15 @@ class MyHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MyApiController.getTodos();
     return Scaffold(
       appBar: MyAppBar(title: 'Flutter To Do List'),
       body: StreamBuilder(
         stream: toDoService.stream$,
         builder: (BuildContext context, AsyncSnapshot snap) {
+//          if(snap.data == 0) {
+//            return CircularProgressIndicator();
+//          }
           return ListWidget(list: snap.data);
         },
       ),
