@@ -11,10 +11,10 @@ class ToDoState {
     _arr2.add([...data]);
   }
 
-  void addTask(text) {
+  void addTask(item) {
     _arr2.add([
       ...current,
-      {'name': '$text', 'createdAt': new DateTime.now()}
+      item
     ]);
   }
 

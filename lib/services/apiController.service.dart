@@ -4,11 +4,41 @@ import 'package:firstflutterapp/services/toDo.service.dart';
 
 const host = 'http://10.0.2.2:3001';
 
+Future myFetch(String url, String type, Map body) async {
+  Map crudTypes = {
+    'get': http.get,
+    'post': http.post,
+    'delete': http.delete,
+    'put': http.put
+  };
+
+  try {
+    if (body.isNotEmpty) {
+      return await crudTypes[type](url, body);
+    } else {
+      return await crudTypes[type](url);
+    }
+  } catch (e) {
+    throw Exception('Request has failde');
+  }
+}
+
 class ApiController {
   void getTodos() async {
-    final response = await http.get('$host');
+    final response = await myFetch(host, 'get', {});
     final data = await json.decode(response.body);
     toDoService.setDataFromAPI(data);
+  }
+
+  void addToDo(name) async {
+    final response = await http.post('$host', body: {'name': name});
+    final data = await json.decode(response.body);
+    toDoService.addTask(data);
+  }
+
+  void removeToDo(index, id) async {
+    await http.delete('$host/$id');
+    toDoService.removeTask(index);
   }
 }
 

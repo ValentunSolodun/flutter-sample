@@ -1,3 +1,4 @@
+import 'package:firstflutterapp/services/apiController.service.dart';
 import 'package:flutter/material.dart';
 import 'package:firstflutterapp/widgets/AppBar.widget.dart';
 import 'package:firstflutterapp/services/toDo.service.dart';
@@ -23,8 +24,10 @@ class AddTask extends StatelessWidget {
               ),
               RaisedButton(
                 onPressed: () => {
-                  toDoService.addTask(_controller.text),
-                  Navigator.pop(context),
+                  if(_controller.text != '') {
+                    MyApiController.addToDo(_controller.text),
+                    Navigator.pop(context),
+                  }
                 },
                 child: Text('Add', style: TextStyle(color: Colors.white)),
                 color: Colors.red,

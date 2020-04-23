@@ -1,3 +1,4 @@
+import 'package:firstflutterapp/services/apiController.service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firstflutterapp/services/toDo.service.dart';
@@ -8,7 +9,7 @@ class ListWidget extends StatelessWidget {
 
   ListWidget({@required this.list});
 
-  void _showDialog(context, index) {
+  void _showDialog(context, id, index) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -25,7 +26,7 @@ class ListWidget extends StatelessWidget {
               child: Text("Remove"),
               onPressed: () {
                 Navigator.of(context).pop();
-                toDoService.removeTask(index);
+                MyApiController.removeToDo(index, id);
               },
             ),
           ],
@@ -38,7 +39,7 @@ class ListWidget extends StatelessWidget {
 //    toDoService.removeTask(index);
 //  }
 
-  Widget _buildAllList(text, date, index, context) {
+  Widget _buildAllList(text, date, id, index, context) {
     var time = DateFormat.jm().format(new DateTime.now());
     return ListTile(
       title: Row(
@@ -51,7 +52,7 @@ class ListWidget extends StatelessWidget {
       ),
       subtitle: RaisedButton(
         child: Text('remove'),
-        onPressed: () => _showDialog(context, index),
+        onPressed: () => _showDialog(context, id, index),
       ),
     );
   }
@@ -75,7 +76,7 @@ class ListWidget extends StatelessWidget {
               : list.length == 0 ? Center(child: Text('List is empty'),) : ListView.builder(itemBuilder: (context, index) {
                   if (index < list.length) {
                     return _buildAllList(list[index]['name'],
-                        list[index]['createdAt'], index, context);
+                        list[index]['createdAt'], list[index]['id'], index, context);
                   }
                 }),
         ),
