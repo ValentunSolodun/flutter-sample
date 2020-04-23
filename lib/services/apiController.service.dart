@@ -14,8 +14,8 @@ Future myFetch(String url, String type, Map body) async {
 
   try {
     if (body.isNotEmpty) {
-      return await crudTypes[type](url, body);
-    } else {
+      return await crudTypes[type](url, body: {...body});
+    } else if (body.isEmpty) {
       return await crudTypes[type](url);
     }
   } catch (e) {
@@ -31,13 +31,13 @@ class ApiController {
   }
 
   void addToDo(name) async {
-    final response = await http.post('$host', body: {'name': name});
+    final response = await myFetch(host, 'post', {'name': name});
     final data = await json.decode(response.body);
     toDoService.addTask(data);
   }
 
   void removeToDo(index, id) async {
-    await http.delete('$host/$id');
+    await myFetch('$host/$id', 'delete', {});
     toDoService.removeTask(index);
   }
 }
